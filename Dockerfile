@@ -17,21 +17,19 @@ RUN curl -o openzwave-1.4.164.tar.gz  http://old.openzwave.com/downloads/openzwa
 ENV LD_LIBRARY_PATH /usr/local/lib
 
 
-RUN mkdir /App/
-COPY App/package.json  /App/package.json
+RUN mkdir /ClimaValvesApp/
+COPY App/package.json  /ClimaValvesApp/package.json
 
-RUN cd /App \
+RUN cd /ClimaValvesApp \
 && npm  install 
 
 
-COPY App /App
+COPY App /ClimaValvesApp
 
 
 
 RUN [ "cross-build-end" ]  
 
 
-ENV TEMPQUEUEURL amqp://pi:pi@192.168.0.96
 
-
-ENTRYPOINT ["node","/App/app.js"]
+ENTRYPOINT ["node","/ClimaValvesApp/app.js"]

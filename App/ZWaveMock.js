@@ -18,10 +18,11 @@ function ZWaveMock(){
         broacastState(nodeId);
     }
     var valueChangedHandler;
+    var scanCompleteHandler;
     this.on = function (command, action) {
-        console.log("mock on " + command);
+        console.log("registering mock on" + command);
         if (command.localeCompare('scan complete')==0) {
-            action();
+            scanCompleteHandler=action;            
         }
         else if (command.localeCompare('value changed')==0) {
             valueChangedHandler = action;
@@ -31,7 +32,10 @@ function ZWaveMock(){
         console.log("mock disconnecting");
     }
     this.connect = function () {
-        console.log("mock connect");
+        console.log("mock connect");        
+        setTimeout(function(){
+            scanCompleteHandler();
+        },1000)
     }
 
     function broacastState(nodeId) {

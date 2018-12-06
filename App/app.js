@@ -1,5 +1,4 @@
-var mqtt = require('./mqttCluster.js');
-const BoilerValve=require('./BoilerValve')
+const Valve=require('./valve')
 global.config = {
     zwaveDriverPath: '/dev/ttyACM0',
     valves: [
@@ -14,17 +13,19 @@ global.config = {
 global.mtqqLocalPath = "mqtt://localhost";
 
 
-var ZWave = require('./node_modules/openzwave-shared/lib/openzwave-shared.js');
-var os = require('os');
+
+//var os = require('os');
 
 
 
-
-var zwave = new ZWave({ ConsoleOutput: false });
+var ZWaveMockMan = require('./ZWaveMock.js');
+var zwave = new ZWaveMockMan.ZWaveMock();
+//var ZWave = require('./node_modules/openzwave-shared/lib/openzwave-shared.js');
+//var zwave = new ZWave({ ConsoleOutput: false });
 
 
 zwave.on('scan complete', async function () {
-    for (let index = 0; index < this.modules.length; index++) {
+    for (let index = 0; index < global.config.valves.length; index++) {
         var valve=global.config.valves[index];
         await valve.initAsync(); 
     }

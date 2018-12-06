@@ -37,6 +37,9 @@ function ZWaveMock(){
             scanCompleteHandler();
         },1000)
     }
+    this.requestNodeState=function(nodeId){
+        broacastState(nodeId)
+    }
 
     function broacastState(nodeId) {
         var node = valves[nodeId];

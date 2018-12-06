@@ -8,11 +8,11 @@ class Valve {
       }
     
     async handleOnValveStateChangedEventAsync(valveReading) {
-        if (this.config.nodeId == valveReading.nodeId && this.config.instanceId == valveReading.instanceId && zwaveOnOffCommandId == valveReading.commandType) {
-            var valveChange = { code: this.config.code, value: valveReading.value, timestamp: valveReading.timestamp };
+        if (this.valveConfig.nodeId == valveReading.nodeId && this.valveConfig.instanceId == valveReading.instanceId && this.zwaveOnOffCommandId == valveReading.commandType) {
+            var valveChange = { code: this.valveConfig.code, value: valveReading.value, timestamp: valveReading.timestamp };
 
             var mqttCluster=await mqtt.getClusterAsync() 
-            mqttCluster.publishData(`zwavevalves/${this.config.code}`,valveChange)
+            mqttCluster.publishData(`zwavevalves/${this.valveConfig.code}`,valveChange)
 
 
         }
@@ -22,20 +22,22 @@ class Valve {
         this.zwave=zwave;
         var mqttCluster=await mqtt.getClusterAsync() 
         var self=this
-        mqttCluster.subscribeData('automaticboilercontrol/'+self.valveConfig.code, function(content) {
-            setState(content)
+        mqttCluster.subscribeData('automaticboilercontrol/'+this.valveConfig.code, function(content) {
+            console.log(self.valveConfig.code)
+            console.log(content)
+            self.setState(content)
         });
     }
     setState(state) {
         var currentTimeStamp = Math.floor(new Date() / 1000);
         var deltaSecs = currentTimeStamp - this.storedValveData.stateTimestamp;
         if (deltaSecs > 5) {
-            zwave.setValue(valveConfig.nodeId, zwaveOnOffCommandId, valveConfig.instanceId, 0, state);
-            storedValveData.stateTimestamp=currentTimeStamp
+            this.zwave.setValue(this.valveConfig.nodeId, this.zwaveOnOffCommandId, this.valveConfig.instanceId, 0, state);
+            this.storedValveData.stateTimestamp=currentTimeStamp
         }
         else {
             console.log("valve locked");
-            zwave.requestNodeState(valveConfig.nodeId);
+            this.zwave.requestNodeState(this.valveConfig.nodeId);
             return;
         }
         

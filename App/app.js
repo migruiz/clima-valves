@@ -2,10 +2,10 @@ const Valve=require('./valve')
 global.config = {
     zwaveDriverPath: '/dev/ttyACM0',
     valves: [
-        new Valve({ nodeId: 5, instanceId: 1, code: 'upstairsValve' }),
-        new Valve({ nodeId: 5, instanceId: 3, code: 'downstairsValve'}),
-        new Valve({ nodeId: 4, instanceId: 1, code: 'testValve' }),
-        new Valve({ nodeId: 4, instanceId: 3, code: 'hotWaterValve' })
+        new Valve({ nodeId: 5, instanceId: 1, code: 'upstairs' }),
+        new Valve({ nodeId: 5, instanceId: 3, code: 'downstairs'}),
+        new Valve({ nodeId: 4, instanceId: 1, code: 'test' }),
+        new Valve({ nodeId: 4, instanceId: 3, code: 'hotwater' })
     ]
 };
 
@@ -27,7 +27,7 @@ var zwave = new ZWaveMockMan.ZWaveMock();
 zwave.on('scan complete', async function () {
     for (let index = 0; index < global.config.valves.length; index++) {
         var valve=global.config.valves[index];
-        await valve.initAsync(); 
+        await valve.initAsync(zwave); 
     }
     zwave.on('value changed',async function (nodeid, comclass, value){
         var valveReading = {
@@ -37,9 +37,9 @@ zwave.on('scan complete', async function () {
             commandType: value.class_id,
             timestamp: Math.floor(new Date() / 1000)
         };
-        for (let index = 0; index < this.modules.length; index++) {
+        for (let index = 0; index < global.config.valves.length; index++) {
             var valve=global.config.valves[index];
-            await valve.handleValveStateChangeAsync(valveReading);    
+            await valve.handleOnValveStateChangedEventAsync(valveReading);    
         }
 
     });

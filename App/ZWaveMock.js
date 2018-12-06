@@ -44,8 +44,13 @@ function ZWaveMock(){
     function broacastState(nodeId) {
         var node = valves[nodeId];
         for (var instance in node) {
-            var state = node[instance];
-            valueChangedHandler(nodeId, 37, { value: state, instance: instance, class_id: 37 });
+            (function(){
+                var state = node[instance];
+                var instanceId=instance
+                setTimeout(() => {                
+                    valueChangedHandler(nodeId, 37, { value: state, instance: instanceId, class_id: 37 });
+                }, 200);
+            })()
         }
     }
 }

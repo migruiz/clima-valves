@@ -9,8 +9,8 @@ global.config = {
     ]
 };
 
-
-global.mtqqLocalPath = "mqtt://localhost";
+global.mtqqLocalPath = process.env.MQTTLOCAL;
+//global.mtqqLocalPath = "mqtt://localhost";
 
 
 

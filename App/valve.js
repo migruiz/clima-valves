@@ -1,6 +1,8 @@
 var mqtt = require('./mqttCluster.js');
-class Valve {
+const EventEmitter = require( 'events' );
+class Valve extends EventEmitter {
     constructor(valveConfig) {
+        super()
         this.valveConfig=valveConfig;
         this.zwave;
         this.zwaveOnOffCommandId = 37;
@@ -9,11 +11,9 @@ class Valve {
     
     async handleOnValveStateChangedEventAsync(valveReading) {
         if (this.valveConfig.nodeId == valveReading.nodeId && this.valveConfig.instanceId == valveReading.instanceId && this.zwaveOnOffCommandId == valveReading.commandType) {
-            var valveChange = { code: this.valveConfig.code, value: valveReading.value, timestamp: valveReading.timestamp };
 
-            var mqttCluster=await mqtt.getClusterAsync() 
-            mqttCluster.publishData(`zwavevalves/${this.valveConfig.code}`,valveChange)
-
+            this.storedValveData.state=valveReading.value;
+            this.emit('valveStateChanged',this);
 
         }
     }

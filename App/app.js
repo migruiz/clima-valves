@@ -19,6 +19,7 @@ global.mtqqLocalPath = process.env.MQTTLOCAL;
 
 
 var ZWaveMockMan = require('./ZWaveMock.js');
+var mqtt = require('./mqttCluster.js');
 var zwave = new ZWaveMockMan.ZWaveMock();
 //var ZWave = require('./node_modules/openzwave-shared/lib/openzwave-shared.js');
 //var zwave = new ZWave({ ConsoleOutput: false });
@@ -27,8 +28,10 @@ var zwave = new ZWaveMockMan.ZWaveMock();
 zwave.on('scan complete', async function () {
     for (let index = 0; index < global.config.valves.length; index++) {
         var valve=global.config.valves[index];
-        await valve.initAsync(zwave); 
-    }
+        await valve.initAsync(zwave);         
+    }    
+    var mqttCluster=await mqtt.getClusterAsync() 
+    subscribeToEvents(mqttCluster)
     zwave.on('value changed',async function (nodeid, comclass, value){
         var valveReading = {
             nodeId: nodeid,
@@ -39,12 +42,32 @@ zwave.on('scan complete', async function () {
         };
         for (let index = 0; index < global.config.valves.length; index++) {
             var valve=global.config.valves[index];
+            valve.on('valveStateChanged',async function(){
+               await reportValvesState()
+              })
             await valve.handleOnValveStateChangedEventAsync(valveReading);    
         }
 
     });
 });
 
+function subscribeToEvents(mqttCluster){
+    mqttCluster.subscribeData("AllBoilerValvesStateRequest",async () =>{
+        await reportValvesState()
+    });
+  }
+
+  async function reportValvesState(){
+    var valvesConfigList={}
+    var valves=global.config.valves
+    for (var key in valves) {
+        var valve=valves[key]
+        valvesConfigList[valve.valveConfig.code]=valve.storedValveData.state
+    }
+    var mqttCluster=await mqtt.getClusterAsync() 
+    mqttCluster.publishData("AllBoilerValvesStateResponse",valvesConfigList)
+  }
+      
 
 
 zwave.on('driver failed', function () {

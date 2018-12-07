@@ -10,7 +10,7 @@ global.config = {
 };
 
 global.mtqqLocalPath = process.env.MQTTLOCAL;
-//global.mtqqLocalPath = "mqtt://localhost";
+//global.mtqqLocalPath = "mqtt://piscos.tk";
 
 
 
@@ -28,7 +28,11 @@ var zwave = new ZWaveMockMan.ZWaveMock();
 zwave.on('scan complete', async function () {
     for (let index = 0; index < global.config.valves.length; index++) {
         var valve=global.config.valves[index];
-        await valve.initAsync(zwave);         
+        await valve.initAsync(zwave);       
+        valve.on('valveStateChanged',async function(updatedValve){           
+            await reportValvesState()
+            console.log('reportValvesState '+ updatedValve.valveConfig.code)
+           })  
     }    
     var mqttCluster=await mqtt.getClusterAsync() 
     subscribeToEvents(mqttCluster)
@@ -42,9 +46,6 @@ zwave.on('scan complete', async function () {
         };
         for (let index = 0; index < global.config.valves.length; index++) {
             var valve=global.config.valves[index];
-            valve.on('valveStateChanged',async function(){
-               await reportValvesState()
-              })
             await valve.handleOnValveStateChangedEventAsync(valveReading);    
         }
 

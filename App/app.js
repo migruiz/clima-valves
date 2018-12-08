@@ -20,9 +20,9 @@ global.mtqqLocalPath = process.env.MQTTLOCAL;
 
 var ZWaveMockMan = require('./ZWaveMock.js');
 var mqtt = require('./mqttCluster.js');
-var zwave = new ZWaveMockMan.ZWaveMock();
-//var ZWave = require('./node_modules/openzwave-shared/lib/openzwave-shared.js');
-//var zwave = new ZWave({ ConsoleOutput: false });
+//var zwave = new ZWaveMockMan.ZWaveMock();
+var ZWave = require('./node_modules/openzwave-shared/lib/openzwave-shared.js');
+var zwave = new ZWave({ ConsoleOutput: false });
 
 
 zwave.on('scan complete', async function () {

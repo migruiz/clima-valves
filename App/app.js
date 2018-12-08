@@ -1,11 +1,12 @@
 const Valve=require('./valve')
+const HotWaterValve=require('./HotWaterValve')
 global.config = {
     zwaveDriverPath: '/dev/ttyACM0',
     valves: [
         new Valve({ nodeId: 5, instanceId: 1, code: 'upstairs' }),
         new Valve({ nodeId: 5, instanceId: 3, code: 'downstairs'}),
         new Valve({ nodeId: 4, instanceId: 1, code: 'test' }),
-        new Valve({ nodeId: 4, instanceId: 3, code: 'hotwater' })
+        new HotWaterValve({ nodeId: 4, instanceId: 3, code: 'hotwater' })
     ]
 };
 

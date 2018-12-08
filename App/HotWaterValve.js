@@ -28,7 +28,7 @@ class HotWaterValve extends Valve {
             this.zwave.setValue(this.valveConfig.nodeId, this.zwaveOnOffCommandId, this.valveConfig.instanceId, 0, true);
             this.hotWaterBoostTimeout=setTimeout(() => {
                 this.zwave.setValue(this.valveConfig.nodeId, this.zwaveOnOffCommandId, this.valveConfig.instanceId, 0, false);
-            }, 1000 * 60 * 2);
+            }, 1000 * 60 * 38);
         }
         else{
             this.zwave.setValue(this.valveConfig.nodeId, this.zwaveOnOffCommandId, this.valveConfig.instanceId, 0, false);

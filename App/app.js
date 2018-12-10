@@ -29,9 +29,6 @@ var zwave = new ZWave({ ConsoleOutput: false });
 
 zwave.on('scan complete', async function () {
     var mqttCluster=await mqtt.getClusterAsync() 
-    mqttCluster.subscribeData("AllBoilerValvesStateRequest",async () =>{
-        await reportValvesState()
-    });
     for (let index = 0; index < global.config.valves.length; index++) {
         var valve=global.config.valves[index];
         await valve.initAsync(zwave);       

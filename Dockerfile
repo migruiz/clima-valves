@@ -25,7 +25,7 @@ RUN cd /ClimaValvesApp \
 
 
 COPY App /ClimaValvesApp
-
+RUN mkdir /ClimaValvesApp/DB
 
 
 RUN [ "cross-build-end" ]  

@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "mqtt": "^2.18.3",
-    "openzwave-shared": "^1.4.0"
+    "openzwave-shared": "^1.4.0",    
+    "sqlite3": "^4.0.2",
+    "a-promise-queue": "2.0.0"
   }
 }

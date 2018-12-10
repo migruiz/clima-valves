@@ -1,29 +1,30 @@
 const Valve=require('./valve')
 const HotWaterValve=require('./HotWaterValve')
+const TestValve=require('./TestValve')
 global.config = {
     zwaveDriverPath: '/dev/ttyACM0',
     valves: [
         new Valve({ nodeId: 5, instanceId: 1, code: 'upstairs' }),
         new Valve({ nodeId: 5, instanceId: 3, code: 'downstairs'}),
-        new Valve({ nodeId: 4, instanceId: 1, code: 'test' }),
+        new TestValve({ nodeId: 4, instanceId: 1, code: 'test' }),
         new HotWaterValve({ nodeId: 4, instanceId: 3, code: 'hotwater' })
     ]
 };
 
-//global.mtqqLocalPath = process.env.MQTTLOCAL;
-global.mtqqLocalPath = "mqtt://piscos.tk";
-global.dbPath = 'c:\\valvesH.sqlite';
+global.mtqqLocalPath = process.env.MQTTLOCAL;
+//global.mtqqLocalPath = "mqtt://piscos.tk";
+global.dbPath = '/ClimaValvesApp/DB/db.sqlite'
 
 
 //var os = require('os');
 
 
 
-var ZWaveMockMan = require('./ZWaveMock.js');
+//var ZWaveMockMan = require('./ZWaveMock.js');
 var mqtt = require('./mqttCluster.js');
-var zwave = new ZWaveMockMan.ZWaveMock();
-//var ZWave = require('./node_modules/openzwave-shared/lib/openzwave-shared.js');
-//var zwave = new ZWave({ ConsoleOutput: false });
+//var zwave = new ZWaveMockMan.ZWaveMock();
+var ZWave = require('./node_modules/openzwave-shared/lib/openzwave-shared.js');
+var zwave = new ZWave({ ConsoleOutput: false });
 
 
 zwave.on('scan complete', async function () {
@@ -71,7 +72,7 @@ function subscribeToEvents(mqttCluster){
         valvesConfigList[valve.valveConfig.code]=valve.storedValveData.state
     }
     var mqttCluster=await mqtt.getClusterAsync() 
-    //mqttCluster.publishData("AllBoilerValvesStateResponse",valvesConfigList)
+    mqttCluster.publishData("AllBoilerValvesStateResponse",valvesConfigList)
   }
       
 

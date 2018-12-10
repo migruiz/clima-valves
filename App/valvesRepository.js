@@ -10,13 +10,12 @@ exports.insertHistoryAsync = async function (valveCode,state,timestamp) {
 exports.deleteHistoryAsync = async function (valveCode,timeStampLimit) {
     await db.instance().operate(db=>db.runAsync("delete from ValvesHistory where valveCode=$valveCode and timestamp<$timeStampLimit",
         {
-            $zoneCode: zoneCode,
+            $valveCode: valveCode,
             $timeStampLimit: timeStampLimit
         }));
 }
 
 
-}
 exports.getHistoryAsync =async  function (valveCode) {
     var valveData = await db.instance().operate(db=>db.allAsync("select state,timestamp from ValvesHistory where valveCode=$valveCode",
     {

@@ -12,7 +12,7 @@ global.config = {
 
 //global.mtqqLocalPath = process.env.MQTTLOCAL;
 global.mtqqLocalPath = "mqtt://piscos.tk";
-
+global.dbPath = 'c:\\valvesH.sqlite';
 
 
 //var os = require('os');
@@ -29,9 +29,8 @@ var zwave = new ZWaveMockMan.ZWaveMock();
 zwave.on('scan complete', async function () {
     var mqttCluster=await mqtt.getClusterAsync() 
     mqttCluster.subscribeData("AllBoilerValvesStateRequest",async () =>{
-        //await reportValvesState()
+        await reportValvesState()
     });
-    return;
     for (let index = 0; index < global.config.valves.length; index++) {
         var valve=global.config.valves[index];
         await valve.initAsync(zwave);       
@@ -72,7 +71,7 @@ function subscribeToEvents(mqttCluster){
         valvesConfigList[valve.valveConfig.code]=valve.storedValveData.state
     }
     var mqttCluster=await mqtt.getClusterAsync() 
-    mqttCluster.publishData("AllBoilerValvesStateResponse",valvesConfigList)
+    //mqttCluster.publishData("AllBoilerValvesStateResponse",valvesConfigList)
   }
       
 

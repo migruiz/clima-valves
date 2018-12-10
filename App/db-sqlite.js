@@ -40,7 +40,7 @@ function SQLDB(path, structure) {
 
     async function initAsync() {
         db=createInstance();
-        var data = await getAsync("PRAGMA USER_VERSION");
+        var data = await getAsync("PRAGMA user_version");
         //var currentVersionNo = data.USER_VERSION;
         var currentVersionNo = data.user_version;
         var newVersionNo = structure.length;

@@ -25,8 +25,7 @@ class ValveHistory {
         var keys=Object.keys(this.history)
         var now=Math.floor(Date.now() / 1000);
         var keepTimeStamp=now - 60 * 60 * HOURSTOKEEP
-        console.log("timestamp to keep "+ keepTimeStamp)
-        var keysToDelete=keys.filter(k=>k<=keepTimeStamp)
+        var keysToDelete=keys.filter(k=>parseInt(k)<=keepTimeStamp)
         for (var key in keysToDelete) {
             delete this.history[key]
         } 

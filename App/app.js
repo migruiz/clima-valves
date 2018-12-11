@@ -33,7 +33,7 @@ zwave.on('scan complete', async function () {
         await valve.initAsync(zwave);       
         valve.on('valveStateChanged',async function(updatedValve){           
             await reportValvesState()
-            console.log('reportValvesState '+ updatedValve.valveConfig.code)
+            //console.log('reportValvesState '+ updatedValve.valveConfig.code)
            })  
     }    
     var mqttCluster=await mqtt.getClusterAsync() 

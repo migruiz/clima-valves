@@ -1,7 +1,6 @@
 var mqtt = require('./mqttCluster.js');
 var sqliteRepository = require('./valvesRepository.js');
-const RESOLUTIONMINS=5
-const HOURSTOKEEP=1
+const HOURSTOKEEP=12
 class ValveHistory {    
     constructor(valveCode) {
       this.history={}
@@ -26,6 +25,7 @@ class ValveHistory {
         var keys=Object.keys(this.history)
         var now=Math.floor(Date.now() / 1000);
         var keepTimeStamp=now - 60 * 60 * HOURSTOKEEP
+        console.log("timestamp to keep "+ keepTimeStamp)
         var keysToDelete=keys.filter(k=>k<=keepTimeStamp)
         for (var key in keysToDelete) {
             delete this.history[key]

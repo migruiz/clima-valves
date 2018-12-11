@@ -26,9 +26,10 @@ class ValveHistory {
         var now=Math.floor(Date.now() / 1000);
         var keepTimeStamp=now - 60 * 60 * HOURSTOKEEP
         var keysToDelete=keys.filter(k=>parseInt(k)<=keepTimeStamp)
-        for (var key in keysToDelete) {
+        for (let index = 0; index < keysToDelete.length; index++) {
+            const key = keysToDelete[index];
             delete this.history[key]
-        } 
+        }
         await sqliteRepository.deleteHistoryAsync(this.valveCode,keepTimeStamp);      
         
     }

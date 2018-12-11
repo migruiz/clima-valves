@@ -13,7 +13,7 @@ class Valve extends EventEmitter {
     
     async handleOnValveStateChangedEventAsync(valveReading) {
         if (this.valveConfig.nodeId == valveReading.nodeId && this.valveConfig.instanceId == valveReading.instanceId && this.zwaveOnOffCommandId == valveReading.commandType) {
-            console.log('handleOnValveStateChangedEventAsync '+ this.valveConfig.code)
+            //console.log('handleOnValveStateChangedEventAsync '+ this.valveConfig.code)
             if (this.storedValveData.state!==valveReading.value){
                 await this.history.onValveStateChange(valveReading.value,valveReading.timestamp)
             }
@@ -29,9 +29,6 @@ class Valve extends EventEmitter {
         var self=this
         mqttCluster.subscribeData('automaticboilercontrol/'+this.valveConfig.code, function(content) {
             self.setState(content)
-        });
-        mqttCluster.subscribeData('zwavevalves/'+this.valveConfig.code, function(content) {
-            console.log(JSON.stringify(content))
         });
     }
     setState(state) {

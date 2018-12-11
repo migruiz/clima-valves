@@ -14,9 +14,6 @@ class HotWaterValve extends Valve {
         mqttCluster.subscribeData("HotWaterValve/turn", function(content) {
             self.setState(content)
         });
-        mqttCluster.subscribeData('zwavevalves/'+this.valveConfig.code, function(content) {
-            console.log(JSON.stringify(content))
-        });
     }
 
 

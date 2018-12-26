@@ -20,6 +20,8 @@ class Valve extends EventEmitter {
             this.storedValveData.state=valveReading.value;
             this.emit('valveStateChanged',this);
 
+            var mqttCluster=await mqtt.getClusterAsync() 
+            mqttCluster.publishData('valves/'+this.valveConfig.code+'/changes',valveReading.value)
         }
     }
 

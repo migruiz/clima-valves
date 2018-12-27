@@ -13,7 +13,7 @@ class Valve extends EventEmitter {
     
     async handleOnValveStateChangedEventAsync(valveReading) {
         if (this.valveConfig.nodeId == valveReading.nodeId && this.valveConfig.instanceId == valveReading.instanceId && this.zwaveOnOffCommandId == valveReading.commandType) {
-            //console.log('handleOnValveStateChangedEventAsync '+ this.valveConfig.code)
+            console.log('handleOnValveStateChangedEventAsync '+ this.valveConfig.code +JSON.stringify(valveReading))
             if (this.storedValveData.state!==valveReading.value){
                 await this.history.onValveStateChange(valveReading.value,valveReading.timestamp)
             }

@@ -5,9 +5,9 @@ global.config = {
     zwaveDriverPath: '/dev/ttyACM0',
     valves: [
         new Valve({ nodeId: 5, instanceId: 1, code: 'upstairs' }),
-        new Valve({ nodeId: 5, instanceId: 3, code: 'downstairs'}),
-        new TestValve({ nodeId: 4, instanceId: 1, code: 'test' }),
-        new HotWaterValve({ nodeId: 4, instanceId: 3, code: 'hotwater' })
+        new Valve({ nodeId: 4, instanceId: 1, code: 'downstairs'}),
+        new TestValve({ nodeId: 4, instanceId: 3, code: 'test' }),
+        new HotWaterValve({ nodeId: 5, instanceId: 3, code: 'hotwater' })
     ]
 };
 
